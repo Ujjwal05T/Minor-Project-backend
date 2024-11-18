@@ -3,10 +3,8 @@ package com.ujjwal.authProject.controller;
 import com.ujjwal.authProject.model.Users;
 import com.ujjwal.authProject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
@@ -19,6 +17,11 @@ public class UserController {
         return service.register(user);
     }
 
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/hello")
+    public String hello(){
+        return "Hello World";
+    }
 
 
 }

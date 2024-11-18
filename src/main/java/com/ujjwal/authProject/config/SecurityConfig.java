@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/register","/login")
                         .permitAll()   //permit all for register and login
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())   //Auth enable
 //                .formLogin(Customizer.withDefaults())   //form login enable
                 .httpBasic(Customizer.withDefaults())   //postman/api login enable
