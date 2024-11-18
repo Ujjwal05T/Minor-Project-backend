@@ -4,22 +4,26 @@ import com.ujjwal.authProject.model.JobDetails;
 import com.ujjwal.authProject.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+
 public class JobController {
 
     @Autowired
     private JobService jobService;
 
-    @PreAuthorize("USER")
-    @GetMapping("/jobs")
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/user/jobs")
     public List<JobDetails> getJobs(){
         return jobService.getAllJobs();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/admin/jobs")
+    public JobDetails addJob(@RequestBody JobDetails jobDetails){
+        return jobService.addJob(jobDetails);
     }
 }

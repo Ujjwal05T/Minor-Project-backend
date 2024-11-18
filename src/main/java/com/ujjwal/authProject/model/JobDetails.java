@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class JobDetails {
 
     @Id
+    private int id;
     @Column(name="applylink")
     private String applyLink;
     private String title;

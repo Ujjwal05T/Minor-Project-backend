@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface JobDetailsRepo extends JpaRepository <JobDetails,String> {
+public interface JobDetailsRepo extends JpaRepository <JobDetails,Integer> {
 }
