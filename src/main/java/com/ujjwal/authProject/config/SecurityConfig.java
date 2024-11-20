@@ -57,34 +57,10 @@ public class SecurityConfig {
         return http.build();
     }
 
-    //UserDetailsService is used to store user details
-    //default are stored in application.properties
-    //We are creating custom user details here (we should details should come from database not here)
-    //InMemoryUserDetailsManager is takes UserDetails objects through constructor and stores them in memory
-    //UserDetails is also interface which is implemented by User class
-    //build method returns UserDetails object
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        UserDetails user1 = User.withDefaultPasswordEncoder()
-//                .username("ujjwal")
-//                .password("u@123")
-//                .roles("USER")
-//                .build();
-//
-//        UserDetails user2 = User.withDefaultPasswordEncoder()
-//                .username("rahul")
-//                .password("r@123")
-//                .roles("USER")
-//                .build();
-//        return new InMemoryUserDetailsManager(user1, user2);
-//    }
 
-
-    //AuthenticationProvider is used to verify user details
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-//        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
         provider.setPasswordEncoder(new BCryptPasswordEncoder(12));
         provider.setUserDetailsService(userDetailsService);
         return provider;
@@ -96,7 +72,5 @@ public class SecurityConfig {
     }
 
     //created bean for injecting where needed
-
-
     //AuthManager uses AuthenticationProvider which uses UserDetailsService to verify user details
 }

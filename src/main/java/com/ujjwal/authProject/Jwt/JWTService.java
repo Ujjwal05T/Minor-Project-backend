@@ -1,17 +1,17 @@
 package com.ujjwal.authProject.Jwt;
 
+import com.ujjwal.authProject.service.MyUserDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Date;
@@ -24,9 +24,9 @@ import java.util.stream.Collectors;
 public class JWTService {
 
     private String secretkey = "";
-    // private final String secretkey = "ce644201fbf17a50cff449be4dc26f31a4a13f6958a4faa89ced36354644118e79254ccbc920103f4d2ed3426112dfa20b8c58b909497bee4a98419c5932b2a21b0634703cbe8d1b1a666fdbd778094928f3c27c508e5e6054fec04fd4cdcb9eed8f8915740440f89a651d95b2f5ed63640c9274d09cbbaab3a33605cc6c5eb123074ecef64bd959f222b47b6af728cedb7ba8b9c68301b948d6fbb29d92672de62e5e521cdf746e2b5e22f0aadd4f9bb5313fe28c394516c45a49263ded0356728ba584b2f6ce53f7e41d5f3f51473bac9d5c9eaa57d688cdca4985e386d1c7c419093c6e47cbbe98d8be7e521048d7689af75259c78b9b65d81fbe6265edd4";
 
-//    private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    @Autowired
+    ApplicationContext context;
 
 
     public JWTService() {
@@ -44,7 +44,8 @@ public class JWTService {
     public String generateToken(String username) {
 
         Map <String, Object> claims = new HashMap<>();
-
+        UserDetails userDetails = context.getBean(MyUserDetailsService.class).loadUserByUsername(username);
+        claims.put("authorities", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
         return Jwts.builder()
                 .claims()
                 .add(claims)
