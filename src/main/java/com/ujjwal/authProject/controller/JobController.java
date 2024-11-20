@@ -15,14 +15,14 @@ public class JobController {
     @Autowired
     private JobService jobService;
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/user/jobs")
+//    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/jobs")
     public List<JobDetails> getJobs(){
         return jobService.getAllJobs();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/admin/jobs")
+//    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/jobs")
     public JobDetails addJob(@RequestBody JobDetails jobDetails){
         return jobService.addJob(jobDetails);
     }

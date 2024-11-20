@@ -1,5 +1,6 @@
 package com.ujjwal.authProject.config;
 
+import com.ujjwal.authProject.Jwt.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +28,9 @@ public class SecurityConfig {
     private UserDetailsService userDetailsService;
     //spring will return default object of UserDetailsService so we implement UserDetails service in MyUserDetailsService class
 
+    @Autowired
+    private JwtFilter jwtFilter;
+
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder(12);
@@ -38,14 +42,16 @@ public class SecurityConfig {
         http
                 .csrf(customizer -> customizer.disable())    //csrf disable
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/register","/login")
+                        .requestMatchers("/register","/login","/jobs")
                         .permitAll()   //permit all for register and login
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/students").hasRole("ADMIN")
                         .anyRequest().authenticated())   //Auth enable
 //                .formLogin(Customizer.withDefaults())   //form login enable
                 .httpBasic(Customizer.withDefaults())   //postman/api login enable
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 //session management disable
+                .addFilterBefore(jwtFilter,UsernamePasswordAuthenticationFilter.class);
+
 
 
         return http.build();
@@ -88,6 +94,8 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
+    //created bean for injecting where needed
 
 
     //AuthManager uses AuthenticationProvider which uses UserDetailsService to verify user details

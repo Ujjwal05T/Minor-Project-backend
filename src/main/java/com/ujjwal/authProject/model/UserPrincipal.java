@@ -16,10 +16,15 @@ public class UserPrincipal implements UserDetails {
         this.user = user;
     }
 
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return Collections.singleton(new SimpleGrantedAuthority("ROLE_"+user.getRole()));
+//    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority("ROLE_"+user.getRole()));
+        return List.of(new SimpleGrantedAuthority("ROLE_"+user.getRole()));
     }
+
 
     @Override
     public String getPassword() {
